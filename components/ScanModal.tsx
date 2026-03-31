@@ -81,8 +81,8 @@ export default function ScanModal({ visible, onClose, onFileSelected }: ScanModa
 
   return (
     <Modal
-      visible={visible}
-      transparent
+      visible={!!visible}
+      transparent={true}
       animationType="slide"
       onRequestClose={onClose}
     >

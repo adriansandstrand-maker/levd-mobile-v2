@@ -12,10 +12,9 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const [scanModalVisible, setScanModalVisible] = useState(false);
+  const [scanModalVisible, setScanModalVisible] = useState<boolean>(false);
 
   const handleFileSelected = (uri: string, name: string, mimeType: string) => {
-    // TODO: handle upload + analysis flow
     console.log('File selected:', { uri, name, mimeType });
   };
 
@@ -23,13 +22,13 @@ export default function TabLayout() {
     <>
       <Tabs
         screenOptions={{
+          header: () => null,
           tabBarActiveTintColor: ThemeColors.accent,
           tabBarInactiveTintColor: ThemeColors.textSecondary,
           tabBarStyle: {
             backgroundColor: ThemeColors.white,
             borderTopColor: ThemeColors.border,
           },
-          headerShown: false,
         }}
       >
         <Tabs.Screen
@@ -61,7 +60,7 @@ export default function TabLayout() {
         />
       </Tabs>
       <ScanModal
-        visible={scanModalVisible}
+        visible={!!scanModalVisible}
         onClose={() => setScanModalVisible(false)}
         onFileSelected={handleFileSelected}
       />
