@@ -43,6 +43,11 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync();
     }
+    // Fallback: hide splash after 3s even if fonts fail
+    const timeout = setTimeout(() => {
+      SplashScreen.hideAsync();
+    }, 3000);
+    return () => clearTimeout(timeout);
   }, [loaded]);
 
   if (!loaded) {
