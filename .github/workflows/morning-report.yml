@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install resend ts-node typescript
-      - run: npx ts-node scripts/morning-report.ts
+      - run: npm install resend
+      - run: node scripts/morning-report.mjs
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
