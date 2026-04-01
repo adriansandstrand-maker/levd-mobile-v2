@@ -1,0 +1,19 @@
+name: Morgenrapport
+
+on:
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install resend ts-node typescript
+      - run: npx ts-node scripts/morning-report.ts
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
