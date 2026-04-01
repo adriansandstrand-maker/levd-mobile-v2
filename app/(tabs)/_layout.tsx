@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { Colors as ThemeColors } from '@/lib/theme';
 import ScanModal from '@/components/ScanModal';
 
@@ -13,9 +13,13 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const [scanModalVisible, setScanModalVisible] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleFileSelected = (uri: string, name: string, mimeType: string) => {
-    console.log('File selected:', { uri, name, mimeType });
+    router.push({
+      pathname: '/upload',
+      params: { uri, name, mimeType },
+    });
   };
 
   return (

@@ -82,6 +82,10 @@ function RootLayoutNav() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="auth" />
+      <Stack.Screen name="upload" options={{ presentation: 'modal' }} />
+      <Stack.Screen name="correct/[id]" />
+      <Stack.Screen name="category/[category]" />
+      <Stack.Screen name="document/[id]" />
     </Stack>
   );
 }
