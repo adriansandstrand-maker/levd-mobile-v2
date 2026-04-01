@@ -8,6 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useRouter } from 'expo-router';
 import { Colors, Fonts, Spacing, Radius, CategoryColors, QuickActionColors } from '@/lib/theme';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
@@ -27,6 +28,7 @@ function getFirstName(user: any): string {
 
 export default function HomeScreen() {
   const { user } = useAuth();
+  const router = useRouter();
   const [counts, setCounts] = useState<Record<CategoryKey, number>>({
     forsikringer: 0,
     kjoretoy: 0,
@@ -132,6 +134,12 @@ export default function HomeScreen() {
             key={cat.key}
             category={cat}
             count={counts[cat.key]}
+            onPress={() =>
+              router.push({
+                pathname: '/category/[category]',
+                params: { category: cat.key },
+              })
+            }
           />
         ))}
       </ScrollView>
