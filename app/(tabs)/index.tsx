@@ -15,6 +15,8 @@ import { supabase } from '@/lib/supabase';
 import Avatar from '@/components/Avatar';
 import CategoryRow from '@/components/CategoryRow';
 import { categories, CategoryKey } from '@/constants/categories';
+import { Document } from '@/types';
+import { formatDate, formatDocumentType, getMimeTypeIcon } from '@/lib/formatters';
 
 function getGreetingEmoji(): string {
   const hour = new Date().getHours();
@@ -35,37 +37,53 @@ export default function HomeScreen() {
     helse: 0,
     familie: 0,
   });
+  const [recentDocs, setRecentDocs] = useState<Document[]>([]);
 
   useEffect(() => {
     if (!user) return;
 
-    async function fetchCounts() {
+    async function fetchData() {
       try {
-        const { data, error } = await supabase
+        // Fetch counts (only complete documents)
+        const { data: countData } = await supabase
           .from('documents')
           .select('category')
-          .eq('user_id', user!.id);
+          .eq('user_id', user!.id)
+          .eq('status', 'complete');
 
-        if (error || !data) return;
+        if (countData) {
+          const newCounts: Record<string, number> = {
+            forsikringer: 0,
+            kjoretoy: 0,
+            helse: 0,
+            familie: 0,
+          };
+          countData.forEach((doc: any) => {
+            if (doc.category && newCounts[doc.category] !== undefined) {
+              newCounts[doc.category]++;
+            }
+          });
+          setCounts(newCounts as Record<CategoryKey, number>);
+        }
 
-        const newCounts: Record<string, number> = {
-          forsikringer: 0,
-          kjoretoy: 0,
-          helse: 0,
-          familie: 0,
-        };
-        data.forEach((doc: any) => {
-          if (doc.category && newCounts[doc.category] !== undefined) {
-            newCounts[doc.category]++;
-          }
-        });
-        setCounts(newCounts as Record<CategoryKey, number>);
+        // Fetch 3 most recent documents
+        const { data: recentData } = await supabase
+          .from('documents')
+          .select('*')
+          .eq('user_id', user!.id)
+          .eq('status', 'complete')
+          .order('created_at', { ascending: false })
+          .limit(3);
+
+        if (recentData) {
+          setRecentDocs(recentData as Document[]);
+        }
       } catch {
         // silently fail
       }
     }
 
-    fetchCounts();
+    fetchData();
   }, [user]);
 
   const fullName = user?.user_metadata?.full_name || user?.email || 'Bruker';
@@ -127,8 +145,42 @@ export default function HomeScreen() {
           <FontAwesome name="chevron-right" size={14} color={CategoryColors.scan.icon} />
         </Pressable>
 
+        {/* Recent Documents */}
+        {recentDocs.length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>Nylig lagt til</Text>
+            {recentDocs.map((doc) => (
+              <Pressable
+                key={doc.id}
+                style={({ pressed }) => [styles.recentRow, pressed && { opacity: 0.7 }]}
+                onPress={() =>
+                  router.push({
+                    pathname: '/document/[id]',
+                    params: { id: doc.id },
+                  })
+                }
+              >
+                <View style={styles.recentIcon}>
+                  <FontAwesome
+                    name={getMimeTypeIcon(doc.mime_type) as any}
+                    size={18}
+                    color={Colors.accent}
+                  />
+                </View>
+                <View style={styles.recentContent}>
+                  <Text style={styles.recentName} numberOfLines={1}>
+                    {formatDocumentType(doc.document_type) || doc.file_name}
+                  </Text>
+                  <Text style={styles.recentDate}>{formatDate(doc.created_at)}</Text>
+                </View>
+                <FontAwesome name="chevron-right" size={14} color={Colors.textSecondary} />
+              </Pressable>
+            ))}
+          </>
+        )}
+
         {/* Categories */}
-        <Text style={styles.sectionTitle}>Kategorier</Text>
+        <Text style={[styles.sectionTitle, recentDocs.length > 0 && { marginTop: Spacing.md }]}>Kategorier</Text>
         {categories.map((cat) => (
           <CategoryRow
             key={cat.key}
@@ -284,5 +336,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.text,
     marginBottom: Spacing.md,
+  },
+  recentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.white,
+    borderRadius: Radius.lg,
+    padding: Spacing.md,
+    marginBottom: Spacing.sm,
+  },
+  recentIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recentContent: {
+    flex: 1,
+    marginLeft: Spacing.md,
+  },
+  recentName: {
+    fontFamily: Fonts.dmSansSemiBold,
+    fontSize: 15,
+    color: Colors.text,
+  },
+  recentDate: {
+    fontFamily: Fonts.jetBrainsMono,
+    fontSize: 12,
+    color: Colors.textSecondary,
+    marginTop: 2,
   },
 });
