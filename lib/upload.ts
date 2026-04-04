@@ -31,6 +31,7 @@ export async function uploadDocument(
     throw new UploadError('INVALID_FILE_TYPE', `Filtypen ${mimeType} er ikke støttet`);
   }
 
+
   // Check file size using new File API
   const file = new File(fileUri);
   const fileInfo = file.info();
@@ -55,15 +56,16 @@ export async function uploadDocument(
     throw new UploadError('UPLOAD_FAILED', 'Kunne ikke laste opp filen');
   }
 
-  // Create document record
+  // Create document record (v2 schema: uploaded_by, file_type, title)
   const { data: docData, error: docError } = await supabase
     .from('documents')
     .insert({
-      user_id: userId,
+      uploaded_by: userId,
       file_path: storagePath,
       file_name: fileName,
-      mime_type: mimeType,
-      status: 'pending',
+      file_type: mimeType,
+      title: fileName.replace(/\.[^.]+$/, ''),
+      category: 'other',
     })
     .select('id')
     .single();

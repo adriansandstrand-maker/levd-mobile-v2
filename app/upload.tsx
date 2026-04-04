@@ -19,8 +19,7 @@ import { CategoryKey } from '@/constants/categories';
 
 type UploadState = 'uploading' | 'analysing' | 'result' | 'error';
 
-const TIMEOUT_MS = 120_000;
-const POLL_INTERVAL_MS = 2000;
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://levd-ai.vercel.app';
 
 export default function UploadScreen() {
   const { uri, name, mimeType } = useLocalSearchParams<{
@@ -36,43 +35,55 @@ export default function UploadScreen() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [errorCode, setErrorCode] = useState<string>('');
   const documentIdRef = useRef<string | null>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasStarted = useRef(false);
 
-  const cleanup = useCallback(() => {
-    if (pollRef.current) clearInterval(pollRef.current);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  }, []);
-
-  const startPolling = useCallback((docId: string) => {
+  const analyseDocument = useCallback(async (docId: string) => {
     setState('analysing');
+    try {
+      const resp = await fetch(`${API_URL}/api/parse-document?mode=async`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentId: docId }),
+      });
 
-    timeoutRef.current = setTimeout(() => {
-      cleanup();
-      setErrorMessage('Analysen tok for lang tid. Prøv igjen.');
-      setErrorCode('TIMEOUT');
-      setState('error');
-    }, TIMEOUT_MS);
-
-    pollRef.current = setInterval(async () => {
-      const { data, error } = await supabase
-        .from('documents')
-        .select('*')
-        .eq('id', docId)
-        .single();
-
-      if (error || !data) return;
-
-      const doc = data as Document;
-
-      if (doc.status === 'complete' || doc.status === 'failed') {
-        cleanup();
-        setDocument(doc);
-        setState('result');
+      if (!resp.ok) {
+        const errText = await resp.text();
+        console.error('Analysis API error:', errText);
+        setErrorMessage('AI-analysen feilet. Prøv igjen.');
+        setErrorCode('ANALYSIS_FAILED');
+        setState('error');
+        return;
       }
-    }, POLL_INTERVAL_MS);
-  }, [cleanup]);
+
+      const result = await resp.json();
+
+      if (result.success) {
+        // Re-fetch the updated document
+        const { data } = await supabase
+          .from('documents')
+          .select('*')
+          .eq('id', docId)
+          .single();
+
+        if (data) {
+          setDocument(data as Document);
+          setState('result');
+        } else {
+          // API succeeded but can't fetch doc — just navigate
+          router.replace({ pathname: '/document/[id]', params: { id: docId } });
+        }
+      } else {
+        setErrorMessage(result.error || 'Analyse feilet');
+        setErrorCode('ANALYSIS_FAILED');
+        setState('error');
+      }
+    } catch (err) {
+      console.error('Analysis fetch error:', err);
+      setErrorMessage('Kunne ikke koble til analysesystemet');
+      setErrorCode('NETWORK_ERROR');
+      setState('error');
+    }
+  }, [router]);
 
   useEffect(() => {
     if (hasStarted.current || !uri || !name || !mimeType || !user) return;
@@ -82,7 +93,7 @@ export default function UploadScreen() {
       try {
         const result = await uploadDocument(uri, name, mimeType, user.id);
         documentIdRef.current = result.documentId;
-        startPolling(result.documentId);
+        await analyseDocument(result.documentId);
       } catch (err) {
         if (err instanceof UploadError) {
           setErrorMessage(err.message);
@@ -94,25 +105,23 @@ export default function UploadScreen() {
         setState('error');
       }
     })();
-
-    return cleanup;
-  }, [uri, name, mimeType, user, startPolling, cleanup]);
+  }, [uri, name, mimeType, user, analyseDocument]);
 
   const handleRetry = () => {
-    hasStarted.current = false;
     setState('uploading');
     setErrorMessage('');
     setErrorCode('');
-    // Re-trigger by resetting hasStarted — effect will re-run
-    hasStarted.current = false;
-    // Force re-run
     (async () => {
       if (!uri || !name || !mimeType || !user) return;
-      hasStarted.current = true;
       try {
-        const result = await uploadDocument(uri, name, mimeType, user.id);
-        documentIdRef.current = result.documentId;
-        startPolling(result.documentId);
+        // If we already have a document ID, just re-analyse
+        if (documentIdRef.current) {
+          await analyseDocument(documentIdRef.current);
+        } else {
+          const result = await uploadDocument(uri, name, mimeType, user.id);
+          documentIdRef.current = result.documentId;
+          await analyseDocument(result.documentId);
+        }
       } catch (err) {
         if (err instanceof UploadError) {
           setErrorMessage(err.message);
