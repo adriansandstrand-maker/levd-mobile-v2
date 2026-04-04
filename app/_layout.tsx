@@ -79,13 +79,13 @@ function RootLayoutNav() {
   }, [session, loading, segments]);
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="auth" />
-      <Stack.Screen name="upload" options={{ presentation: 'modal' }} />
-      <Stack.Screen name="correct/[id]" />
-      <Stack.Screen name="category/[category]" />
-      <Stack.Screen name="document/[id]" />
+    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#F5F0EB' } }}>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="auth" options={{ headerShown: false }} />
+      <Stack.Screen name="upload" options={{ headerShown: false, presentation: 'modal' }} />
+      <Stack.Screen name="correct/[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="category/[category]" options={{ headerShown: false }} />
+      <Stack.Screen name="document/[id]" options={{ headerShown: false }} />
     </Stack>
   );
 }
