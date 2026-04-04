@@ -1,30 +1,28 @@
 export type Category =
-  | 'forsikringer'
-  | 'kjoretoy'
-  | 'helse'
-  | 'familie'
-  | 'okonomi'
-  | 'jus'
-  | 'id'
-  | 'utdanning'
-  | 'reise'
-  | 'bolig'
-  | 'annet';
-
-export type DocumentStatus = 'pending' | 'analysing' | 'complete' | 'failed';
+  | 'contract'
+  | 'insurance'
+  | 'loan'
+  | 'receipt'
+  | 'identification'
+  | 'medical'
+  | 'legal'
+  | 'educational'
+  | 'drawing'
+  | 'other';
 
 export interface Document {
   id: string;
-  user_id: string;
+  asset_id: string | null;
+  uploaded_by: string;
+  title: string | null;
+  description: string | null;
   file_path: string;
   file_name: string;
-  mime_type: string | null;
+  file_type: string | null;
+  file_size: number | null;
   category: Category | null;
-  status: DocumentStatus;
-  confidence: number | null;
-  document_type: string | null;
-  entity_name: string | null;
-  expiry_date: string | null;
+  metadata: Record<string, any> | null;
+  occurred_at: string | null;
   created_at: string;
-  analysis_error: string | null;
+  updated_at: string | null;
 }

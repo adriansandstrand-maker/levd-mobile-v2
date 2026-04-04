@@ -7,81 +7,76 @@ export interface DocumentType {
 }
 
 export const documentTypes: DocumentType[] = [
-  // Forsikringer
-  { key: 'bilforsikring', label: 'Bilforsikring', category: 'forsikringer' },
-  { key: 'innboforsikring', label: 'Innboforsikring', category: 'forsikringer' },
-  { key: 'reiseforsikring', label: 'Reiseforsikring', category: 'forsikringer' },
-  { key: 'husforsikring', label: 'Husforsikring', category: 'forsikringer' },
-  { key: 'livsforsikring', label: 'Livsforsikring', category: 'forsikringer' },
-  { key: 'helseforsikring', label: 'Helseforsikring', category: 'forsikringer' },
-  { key: 'ulykkesforsikring', label: 'Ulykkesforsikring', category: 'forsikringer' },
-  { key: 'batforsikring', label: 'Båtforsikring', category: 'forsikringer' },
+  // Insurance
+  { key: 'bilforsikring', label: 'Bilforsikring', category: 'insurance' },
+  { key: 'innboforsikring', label: 'Innboforsikring', category: 'insurance' },
+  { key: 'reiseforsikring', label: 'Reiseforsikring', category: 'insurance' },
+  { key: 'husforsikring', label: 'Husforsikring', category: 'insurance' },
+  { key: 'livsforsikring', label: 'Livsforsikring', category: 'insurance' },
+  { key: 'helseforsikring', label: 'Helseforsikring', category: 'insurance' },
+  { key: 'ulykkesforsikring', label: 'Ulykkesforsikring', category: 'insurance' },
+  { key: 'batforsikring', label: 'Båtforsikring', category: 'insurance' },
 
-  // Kjøretøy
-  { key: 'vognkort', label: 'Vognkort', category: 'kjoretoy' },
-  { key: 'forerkort', label: 'Førerkort', category: 'kjoretoy' },
-  { key: 'eu_kontroll', label: 'EU-kontroll', category: 'kjoretoy' },
-  { key: 'service_kvittering', label: 'Servicekvittering', category: 'kjoretoy' },
-  { key: 'kjoretoyhistorikk', label: 'Kjøretøyhistorikk', category: 'kjoretoy' },
-  { key: 'kjopskontrakt_kjoretoy', label: 'Kjøpskontrakt kjøretøy', category: 'kjoretoy' },
+  // Contract
+  { key: 'arbeidskontrakt', label: 'Arbeidskontrakt', category: 'contract' },
+  { key: 'leiekontrakt', label: 'Leiekontrakt', category: 'contract' },
+  { key: 'kjopskontrakt', label: 'Kjøpskontrakt', category: 'contract' },
+  { key: 'samboerkontrakt', label: 'Samboerkontrakt', category: 'contract' },
+  { key: 'abonnementsavtale', label: 'Abonnementsavtale', category: 'contract' },
+  { key: 'kjopskontrakt_eiendom', label: 'Kjøpskontrakt eiendom', category: 'contract' },
+  { key: 'kjopskontrakt_kjoretoy', label: 'Kjøpskontrakt kjøretøy', category: 'contract' },
 
-  // Helse
-  { key: 'resept', label: 'Resept', category: 'helse' },
-  { key: 'epikriser', label: 'Epikriser', category: 'helse' },
-  { key: 'vaksinasjon', label: 'Vaksinasjon', category: 'helse' },
-  { key: 'legeerklaring', label: 'Legeerklæring', category: 'helse' },
-  { key: 'tannlege', label: 'Tannlege', category: 'helse' },
-  { key: 'helsejournal', label: 'Helsejournal', category: 'helse' },
-  { key: 'sykemelding', label: 'Sykemelding', category: 'helse' },
+  // Loan
+  { key: 'lanedokument', label: 'Lånedokument', category: 'loan' },
+  { key: 'skattemelding', label: 'Skattemelding', category: 'loan' },
+  { key: 'lonnslipp', label: 'Lønnsslipp', category: 'loan' },
+  { key: 'kontoutskrift', label: 'Kontoutskrift', category: 'loan' },
+  { key: 'arsoppgave', label: 'Årsoppgave', category: 'loan' },
 
-  // Familie
-  { key: 'fodselsattest', label: 'Fødselsattest', category: 'familie' },
-  { key: 'vigselsattest', label: 'Vigselsattest', category: 'familie' },
-  { key: 'fullmakt', label: 'Fullmakt', category: 'familie' },
-  { key: 'samboerkontrakt', label: 'Samboerkontrakt', category: 'familie' },
+  // Receipt
+  { key: 'kvittering', label: 'Kvittering', category: 'receipt' },
+  { key: 'garantibevis', label: 'Garantibevis', category: 'receipt' },
+  { key: 'service_kvittering', label: 'Servicekvittering', category: 'receipt' },
 
-  // Økonomi
-  { key: 'lanedokument', label: 'Lånedokument', category: 'okonomi' },
-  { key: 'skattemelding', label: 'Skattemelding', category: 'okonomi' },
-  { key: 'lonnslipp', label: 'Lønnsslipp', category: 'okonomi' },
-  { key: 'kontoutskrift', label: 'Kontoutskrift', category: 'okonomi' },
-  { key: 'arsoppgave', label: 'Årsoppgave', category: 'okonomi' },
+  // Identification
+  { key: 'pass', label: 'Pass', category: 'identification' },
+  { key: 'nasjonal_id', label: 'Nasjonalt ID-kort', category: 'identification' },
+  { key: 'fodselssattest', label: 'Fødselsattest', category: 'identification' },
+  { key: 'forerkort', label: 'Førerkort', category: 'identification' },
 
-  // Jus
-  { key: 'arbeidskontrakt', label: 'Arbeidskontrakt', category: 'jus' },
-  { key: 'testament', label: 'Testament', category: 'jus' },
-  { key: 'ektepakt', label: 'Ektepakt', category: 'jus' },
-  { key: 'barnebidrag', label: 'Barnebidrag', category: 'jus' },
-  { key: 'dom', label: 'Dom', category: 'jus' },
+  // Medical
+  { key: 'resept', label: 'Resept', category: 'medical' },
+  { key: 'epikriser', label: 'Epikriser', category: 'medical' },
+  { key: 'vaksinasjon', label: 'Vaksinasjon', category: 'medical' },
+  { key: 'legeerklaring', label: 'Legeerklæring', category: 'medical' },
+  { key: 'tannlege', label: 'Tannlege', category: 'medical' },
+  { key: 'helsejournal', label: 'Helsejournal', category: 'medical' },
+  { key: 'sykemelding', label: 'Sykemelding', category: 'medical' },
 
-  // ID
-  { key: 'pass', label: 'Pass', category: 'id' },
-  { key: 'nasjonal_id', label: 'Nasjonalt ID-kort', category: 'id' },
-  { key: 'fodselssattest', label: 'Fødselsattest', category: 'id' },
+  // Legal
+  { key: 'testament', label: 'Testament', category: 'legal' },
+  { key: 'ektepakt', label: 'Ektepakt', category: 'legal' },
+  { key: 'fullmakt', label: 'Fullmakt', category: 'legal' },
+  { key: 'barnebidrag', label: 'Barnebidrag', category: 'legal' },
+  { key: 'dom', label: 'Dom', category: 'legal' },
+  { key: 'skjote', label: 'Skjøte', category: 'legal' },
+  { key: 'byggetillatelse', label: 'Byggetillatelse', category: 'legal' },
+  { key: 'takstrapport', label: 'Takstrapport', category: 'legal' },
 
-  // Utdanning
-  { key: 'karakterutskrift', label: 'Karakterutskrift', category: 'utdanning' },
-  { key: 'vitnemal', label: 'Vitnemål', category: 'utdanning' },
-  { key: 'kursbevis', label: 'Kursbevis', category: 'utdanning' },
-  { key: 'studentbevis', label: 'Studentbevis', category: 'utdanning' },
+  // Educational
+  { key: 'karakterutskrift', label: 'Karakterutskrift', category: 'educational' },
+  { key: 'vitnemal', label: 'Vitnemål', category: 'educational' },
+  { key: 'kursbevis', label: 'Kursbevis', category: 'educational' },
+  { key: 'studentbevis', label: 'Studentbevis', category: 'educational' },
 
-  // Reise
-  { key: 'boardingkort', label: 'Boardingkort', category: 'reise' },
-  { key: 'hotellbekreftelse', label: 'Hotellbekreftelse', category: 'reise' },
-  { key: 'visum', label: 'Visum', category: 'reise' },
-  { key: 'reisebekreftelse', label: 'Reisebekreftelse', category: 'reise' },
+  // Drawing
+  { key: 'tegning', label: 'Tegning', category: 'drawing' },
+  { key: 'barnetegning', label: 'Barnetegning', category: 'drawing' },
 
-  // Bolig
-  { key: 'skjote', label: 'Skjøte', category: 'bolig' },
-  { key: 'leiekontrakt', label: 'Leiekontrakt', category: 'bolig' },
-  { key: 'byggetillatelse', label: 'Byggetillatelse', category: 'bolig' },
-  { key: 'takstrapport', label: 'Takstrapport', category: 'bolig' },
-  { key: 'kjopskontrakt_eiendom', label: 'Kjøpskontrakt eiendom', category: 'bolig' },
-
-  // Annet
-  { key: 'garantibevis', label: 'Garantibevis', category: 'annet' },
-  { key: 'kvittering', label: 'Kvittering', category: 'annet' },
-  { key: 'kjopskontrakt', label: 'Kjøpskontrakt', category: 'annet' },
-  { key: 'abonnementsavtale', label: 'Abonnementsavtale', category: 'annet' },
-  { key: 'ukjent', label: 'Ukjent', category: 'annet' },
+  // Other
+  { key: 'vognkort', label: 'Vognkort', category: 'other' },
+  { key: 'eu_kontroll', label: 'EU-kontroll', category: 'other' },
+  { key: 'fodselsattest', label: 'Fødselsattest', category: 'other' },
+  { key: 'vigselsattest', label: 'Vigselsattest', category: 'other' },
+  { key: 'ukjent', label: 'Ukjent', category: 'other' },
 ];

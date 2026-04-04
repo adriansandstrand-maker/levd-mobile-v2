@@ -4,17 +4,16 @@ const MONTHS_NO = [
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
-  forsikringer: 'Forsikringer',
-  kjoretoy: 'Kjøretøy',
-  helse: 'Helse',
-  familie: 'Familie',
-  okonomi: 'Økonomi',
-  jus: 'Jus',
-  id: 'ID',
-  utdanning: 'Utdanning',
-  reise: 'Reise',
-  bolig: 'Bolig',
-  annet: 'Annet',
+  insurance: 'Forsikringer',
+  contract: 'Kontrakter',
+  loan: 'Lån',
+  receipt: 'Kvitteringer',
+  identification: 'ID-dokumenter',
+  medical: 'Helse',
+  legal: 'Juridisk',
+  educational: 'Utdanning',
+  drawing: 'Tegninger',
+  other: 'Annet',
 };
 
 export function formatDate(dateString: string | null): string {
@@ -27,9 +26,9 @@ export function formatDate(dateString: string | null): string {
   return `${day}. ${month} ${year}`;
 }
 
-export function formatDocumentType(type: string | null): string {
-  if (!type) return 'Ukjent';
-  return type.charAt(0).toUpperCase() + type.slice(1).replace(/_/g, ' ');
+export function formatDocumentTitle(title: string | null): string {
+  if (!title) return 'Ukjent';
+  return title.charAt(0).toUpperCase() + title.slice(1).replace(/_/g, ' ');
 }
 
 export function formatCategory(category: string | null): string {
@@ -37,32 +36,11 @@ export function formatCategory(category: string | null): string {
   return CATEGORY_LABELS[category] || category.charAt(0).toUpperCase() + category.slice(1);
 }
 
-export function isExpiringSoon(expiryDate: string | null): boolean {
-  if (!expiryDate) return false;
-  const expiry = new Date(expiryDate);
-  if (isNaN(expiry.getTime())) return false;
-  const now = new Date();
-  const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-  return expiry.getTime() > now.getTime() && expiry.getTime() - now.getTime() <= thirtyDays;
-}
-
-export function isExpired(expiryDate: string | null): boolean {
-  if (!expiryDate) return false;
-  const expiry = new Date(expiryDate);
-  if (isNaN(expiry.getTime())) return false;
-  return expiry.getTime() < new Date().getTime();
-}
-
-export function formatConfidence(confidence: number | null): string {
-  if (confidence === null || confidence === undefined) return 'Ukjent';
-  return `${Math.round(confidence * 100)}%`;
-}
-
-export function getMimeTypeIcon(mimeType: string | null): string {
-  if (!mimeType) return 'file-o';
-  if (mimeType === 'application/pdf') return 'file-pdf-o';
-  if (mimeType.startsWith('image/')) return 'image';
-  if (mimeType.includes('word') || mimeType.includes('docx')) return 'file-word-o';
+export function getFileTypeIcon(fileType: string | null): string {
+  if (!fileType) return 'file-o';
+  if (fileType === 'application/pdf') return 'file-pdf-o';
+  if (fileType.startsWith('image/')) return 'image';
+  if (fileType.includes('word') || fileType.includes('docx')) return 'file-word-o';
   return 'file-o';
 }
 

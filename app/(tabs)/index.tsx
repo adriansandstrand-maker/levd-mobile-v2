@@ -14,11 +14,12 @@ import { useRouter } from 'expo-router';
 import { Colors, Fonts, Spacing, Radius, CategoryColors, QuickActionColors } from '@/lib/theme';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
+import { getUserDocumentIds } from '@/lib/documents';
 import Avatar from '@/components/Avatar';
 import CategoryRow from '@/components/CategoryRow';
 import { categories, CategoryKey } from '@/constants/categories';
 import { Document } from '@/types';
-import { formatDate, formatDocumentType, getMimeTypeIcon } from '@/lib/formatters';
+import { formatDate, formatDocumentTitle, getFileTypeIcon } from '@/lib/formatters';
 
 function getGreetingEmoji(): string {
   const hour = new Date().getHours();
@@ -31,17 +32,16 @@ function getFirstName(user: any): string {
 }
 
 const initialCounts: Record<CategoryKey, number> = {
-  forsikringer: 0,
-  kjoretoy: 0,
-  helse: 0,
-  familie: 0,
-  okonomi: 0,
-  jus: 0,
-  id: 0,
-  utdanning: 0,
-  reise: 0,
-  bolig: 0,
-  annet: 0,
+  insurance: 0,
+  contract: 0,
+  loan: 0,
+  receipt: 0,
+  identification: 0,
+  medical: 0,
+  legal: 0,
+  educational: 0,
+  drawing: 0,
+  other: 0,
 };
 
 export default function HomeScreen() {
@@ -55,32 +55,37 @@ export default function HomeScreen() {
   const fetchData = useCallback(async () => {
     if (!user) return;
     try {
-      const { data: countData } = await supabase
-        .from('documents')
-        .select('category')
-        .eq('user_id', user.id)
-        .eq('status', 'complete');
+      const docIds = await getUserDocumentIds(user.id);
 
-      if (countData) {
-        const newCounts: Record<string, number> = { ...initialCounts };
-        countData.forEach((doc: any) => {
-          if (doc.category && newCounts[doc.category] !== undefined) {
-            newCounts[doc.category]++;
-          }
-        });
-        setCounts(newCounts as Record<CategoryKey, number>);
-      }
+      if (docIds.length > 0) {
+        const { data: countData } = await supabase
+          .from('documents')
+          .select('category')
+          .in('id', docIds);
 
-      const { data: recentData } = await supabase
-        .from('documents')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'complete')
-        .order('created_at', { ascending: false })
-        .limit(3);
+        if (countData) {
+          const newCounts: Record<string, number> = { ...initialCounts };
+          countData.forEach((doc: any) => {
+            if (doc.category && newCounts[doc.category] !== undefined) {
+              newCounts[doc.category]++;
+            }
+          });
+          setCounts(newCounts as Record<CategoryKey, number>);
+        }
 
-      if (recentData) {
-        setRecentDocs(recentData as Document[]);
+        const { data: recentData } = await supabase
+          .from('documents')
+          .select('*')
+          .in('id', docIds)
+          .order('created_at', { ascending: false })
+          .limit(3);
+
+        if (recentData) {
+          setRecentDocs(recentData as Document[]);
+        }
+      } else {
+        setCounts({ ...initialCounts });
+        setRecentDocs([]);
       }
     } catch {
       // silently fail
@@ -188,14 +193,14 @@ export default function HomeScreen() {
                   >
                     <View style={styles.recentIcon}>
                       <FontAwesome
-                        name={getMimeTypeIcon(doc.mime_type) as any}
+                        name={getFileTypeIcon(doc.file_type) as any}
                         size={18}
                         color={Colors.accent}
                       />
                     </View>
                     <View style={styles.recentContent}>
                       <Text style={styles.recentName} numberOfLines={1}>
-                        {formatDocumentType(doc.document_type) || doc.file_name}
+                        {doc.title || doc.file_name}
                       </Text>
                       <Text style={styles.recentDate}>{formatDate(doc.created_at)}</Text>
                     </View>

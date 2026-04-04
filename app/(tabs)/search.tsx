@@ -14,8 +14,9 @@ import { useRouter } from 'expo-router';
 import { Colors, Fonts, Spacing, Radius, CategoryColors } from '@/lib/theme';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
+import { getUserDocumentIds } from '@/lib/documents';
 import { Document } from '@/types';
-import { formatDate, formatDocumentType, formatCategory, getMimeTypeIcon } from '@/lib/formatters';
+import { formatDate, formatDocumentTitle, formatCategory, getFileTypeIcon } from '@/lib/formatters';
 
 export default function SearchScreen() {
   const { user } = useAuth();
@@ -37,14 +38,20 @@ export default function SearchScreen() {
     setSearched(true);
 
     try {
+      const docIds = await getUserDocumentIds(user.id);
+      if (docIds.length === 0) {
+        setResults([]);
+        setLoading(false);
+        return;
+      }
+
       const searchTerm = `%${text.trim().toLowerCase()}%`;
 
       const { data } = await supabase
         .from('documents')
         .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'complete')
-        .or(`file_name.ilike.${searchTerm},document_type.ilike.${searchTerm},category.ilike.${searchTerm},entity_name.ilike.${searchTerm}`)
+        .in('id', docIds)
+        .or(`file_name.ilike.${searchTerm},title.ilike.${searchTerm},category.ilike.${searchTerm},description.ilike.${searchTerm}`)
         .order('created_at', { ascending: false })
         .limit(30);
 
@@ -75,14 +82,14 @@ export default function SearchScreen() {
       >
         <View style={[styles.resultIcon, { backgroundColor: catColors.bg }]}>
           <FontAwesome
-            name={getMimeTypeIcon(item.mime_type) as any}
+            name={getFileTypeIcon(item.file_type) as any}
             size={18}
             color={catColors.icon}
           />
         </View>
         <View style={styles.resultContent}>
           <Text style={styles.resultName} numberOfLines={1}>
-            {formatDocumentType(item.document_type) || item.file_name}
+            {item.title || item.file_name}
           </Text>
           <Text style={styles.resultMeta} numberOfLines={1}>
             {formatCategory(item.category)} · {formatDate(item.created_at)}

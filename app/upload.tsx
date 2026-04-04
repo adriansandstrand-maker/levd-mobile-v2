@@ -139,7 +139,7 @@ export default function UploadScreen() {
     if (!documentIdRef.current) return;
     await supabase
       .from('documents')
-      .update({ status: 'complete', category: 'annet', document_type: 'ukjent' })
+      .update({ category: 'other', title: 'ukjent' })
       .eq('id', documentIdRef.current);
     router.replace({
       pathname: '/document/[id]',
@@ -147,9 +147,10 @@ export default function UploadScreen() {
     });
   };
 
-  // Result view based on confidence
+  // Result view — the analysis API sets category/title on the document
   if (state === 'result' && document) {
-    const confidence = document.confidence ?? 0;
+    const metadata = document.metadata as Record<string, any> | null;
+    const confidence = metadata?.confidence ?? 0;
 
     // High confidence — auto-navigate
     if (confidence >= 0.95) {
@@ -167,8 +168,8 @@ export default function UploadScreen() {
           <View style={styles.centered}>
             <ConfidenceCard
               confidence={confidence}
-              suggestedCategory={(document.category || 'annet') as CategoryKey}
-              documentName={document.document_type || document.file_name}
+              suggestedCategory={(document.category || 'other') as CategoryKey}
+              documentName={document.title || document.file_name}
               onConfirm={() => {
                 router.replace({
                   pathname: '/document/[id]',
@@ -188,48 +189,11 @@ export default function UploadScreen() {
     }
 
     // Low confidence — redirect to correction
-    if (confidence < 0.80 && document.status === 'complete') {
-      router.replace({
-        pathname: '/correct/[id]',
-        params: { id: document.id },
-      });
-      return null;
-    }
-
-    // Failed status
-    if (document.status === 'failed') {
-      return (
-        <SafeAreaView style={styles.safeArea}>
-          <View style={styles.centered}>
-            <View style={styles.errorCard}>
-              <View style={[styles.iconCircle, { backgroundColor: '#EDDADB' }]}>
-                <FontAwesome name="exclamation-triangle" size={24} color="#7E3535" />
-              </View>
-              <Text style={styles.errorTitle}>Analyse feilet</Text>
-              <Text style={styles.errorSubtitle}>
-                {document.analysis_error || 'Kunne ikke analysere dokumentet'}
-              </Text>
-              <View style={styles.errorActions}>
-                <Pressable
-                  style={({ pressed }) => [styles.button, styles.retryButton, pressed && styles.pressed]}
-                  onPress={handleRetry}
-                >
-                  <FontAwesome name="refresh" size={16} color={Colors.white} />
-                  <Text style={styles.retryText}>Prøv igjen</Text>
-                </Pressable>
-                <Pressable
-                  style={({ pressed }) => [styles.button, styles.saveButton, pressed && styles.pressed]}
-                  onPress={handleSaveAnyway}
-                >
-                  <FontAwesome name="save" size={16} color={Colors.accent} />
-                  <Text style={styles.saveText}>Lagre likevel</Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
-      );
-    }
+    router.replace({
+      pathname: '/correct/[id]',
+      params: { id: document.id },
+    });
+    return null;
   }
 
   // Error state
@@ -339,9 +303,6 @@ const styles = StyleSheet.create({
   retryButton: {
     backgroundColor: Colors.accent,
   },
-  saveButton: {
-    backgroundColor: Colors.surface,
-  },
   backButton: {
     backgroundColor: Colors.surface,
   },
@@ -349,11 +310,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.dmSansSemiBold,
     fontSize: 15,
     color: Colors.white,
-  },
-  saveText: {
-    fontFamily: Fonts.dmSansSemiBold,
-    fontSize: 15,
-    color: Colors.accent,
   },
   backText: {
     fontFamily: Fonts.dmSansSemiBold,

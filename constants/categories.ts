@@ -1,17 +1,16 @@
 import { CategoryColors } from '@/lib/theme';
 
 export type CategoryKey =
-  | 'forsikringer'
-  | 'kjoretoy'
-  | 'helse'
-  | 'familie'
-  | 'okonomi'
-  | 'jus'
-  | 'id'
-  | 'utdanning'
-  | 'reise'
-  | 'bolig'
-  | 'annet';
+  | 'insurance'
+  | 'contract'
+  | 'loan'
+  | 'receipt'
+  | 'identification'
+  | 'medical'
+  | 'legal'
+  | 'educational'
+  | 'drawing'
+  | 'other';
 
 export interface Category {
   key: CategoryKey;
@@ -22,69 +21,63 @@ export interface Category {
 
 export const categories: Category[] = [
   {
-    key: 'forsikringer',
+    key: 'insurance',
     label: 'Forsikringer',
     icon: 'shield',
-    colors: CategoryColors.forsikringer,
+    colors: CategoryColors.insurance,
   },
   {
-    key: 'kjoretoy',
-    label: 'Kjøretøy',
-    icon: 'car',
-    colors: CategoryColors.kjoretoy,
+    key: 'contract',
+    label: 'Kontrakter',
+    icon: 'file-text-o',
+    colors: CategoryColors.contract,
   },
   {
-    key: 'helse',
+    key: 'loan',
+    label: 'Lån',
+    icon: 'bank',
+    colors: CategoryColors.loan,
+  },
+  {
+    key: 'receipt',
+    label: 'Kvitteringer',
+    icon: 'credit-card',
+    colors: CategoryColors.receipt,
+  },
+  {
+    key: 'identification',
+    label: 'ID-dokumenter',
+    icon: 'id-card',
+    colors: CategoryColors.identification,
+  },
+  {
+    key: 'medical',
     label: 'Helse',
     icon: 'heartbeat',
-    colors: CategoryColors.helse,
+    colors: CategoryColors.medical,
   },
   {
-    key: 'familie',
-    label: 'Familie',
-    icon: 'users',
-    colors: CategoryColors.familie,
-  },
-  {
-    key: 'okonomi',
-    label: 'Økonomi',
-    icon: 'bank',
-    colors: CategoryColors.okonomi,
-  },
-  {
-    key: 'jus',
-    label: 'Jus',
+    key: 'legal',
+    label: 'Juridisk',
     icon: 'balance-scale',
-    colors: CategoryColors.jus,
+    colors: CategoryColors.legal,
   },
   {
-    key: 'id',
-    label: 'ID',
-    icon: 'id-card',
-    colors: CategoryColors.id,
-  },
-  {
-    key: 'utdanning',
+    key: 'educational',
     label: 'Utdanning',
     icon: 'graduation-cap',
-    colors: CategoryColors.utdanning,
+    colors: CategoryColors.educational,
   },
   {
-    key: 'reise',
-    label: 'Reise',
-    icon: 'plane',
-    colors: CategoryColors.reise,
+    key: 'drawing',
+    label: 'Tegninger',
+    icon: 'paint-brush',
+    colors: CategoryColors.drawing,
   },
   {
-    key: 'bolig',
-    label: 'Bolig',
-    icon: 'home',
-    colors: CategoryColors.bolig,
-  },
-  {
-    key: 'annet',
+    key: 'other',
     label: 'Annet',
     icon: 'folder-o',
-    colors: CategoryColors.annet,
+    colors: CategoryColors.other,
   },
 ];

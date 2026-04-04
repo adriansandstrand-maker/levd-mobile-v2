@@ -13,8 +13,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors, Fonts, Spacing, Radius } from '@/lib/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth';
+import { getUserDocumentIds } from '@/lib/documents';
 import { Document } from '@/types';
-import { formatDate, formatDocumentType, getMimeTypeIcon, formatCategory } from '@/lib/formatters';
+import { formatDate, formatDocumentTitle, getFileTypeIcon, formatCategory } from '@/lib/formatters';
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams<{ category: string }>();
@@ -26,16 +27,18 @@ export default function CategoryScreen() {
   useEffect(() => {
     if (!category || !user) return;
     (async () => {
-      const { data } = await supabase
-        .from('documents')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('category', category)
-        .eq('status', 'complete')
-        .order('created_at', { ascending: false });
+      const docIds = await getUserDocumentIds(user.id);
+      if (docIds.length > 0) {
+        const { data } = await supabase
+          .from('documents')
+          .select('*')
+          .in('id', docIds)
+          .eq('category', category)
+          .order('created_at', { ascending: false });
 
-      if (data) {
-        setDocuments(data as Document[]);
+        if (data) {
+          setDocuments(data as Document[]);
+        }
       }
       setLoading(false);
     })();
@@ -55,14 +58,14 @@ export default function CategoryScreen() {
     >
       <View style={styles.docIcon}>
         <FontAwesome
-          name={getMimeTypeIcon(item.mime_type) as any}
+          name={getFileTypeIcon(item.file_type) as any}
           size={20}
           color={Colors.accent}
         />
       </View>
       <View style={styles.docContent}>
         <Text style={styles.docName} numberOfLines={1}>
-          {formatDocumentType(item.document_type) || item.file_name}
+          {item.title || item.file_name}
         </Text>
         <Text style={styles.docDate}>{formatDate(item.created_at)}</Text>
       </View>

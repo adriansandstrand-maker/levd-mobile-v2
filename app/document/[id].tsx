@@ -18,12 +18,9 @@ import { supabase } from '@/lib/supabase';
 import { Document } from '@/types';
 import {
   formatDate,
-  formatDocumentType,
+  formatDocumentTitle,
   formatCategory,
-  formatConfidence,
-  getMimeTypeIcon,
-  isExpired,
-  isExpiringSoon,
+  getFileTypeIcon,
 } from '@/lib/formatters';
 
 export default function DocumentScreen() {
@@ -113,13 +110,8 @@ export default function DocumentScreen() {
     );
   }
 
-  const isImage = document.mime_type?.startsWith('image/');
-  const isPdf = document.mime_type === 'application/pdf';
-  const expiryWarning = isExpired(document.expiry_date)
-    ? 'Utgått'
-    : isExpiringSoon(document.expiry_date)
-    ? 'Utløper snart'
-    : null;
+  const isImage = document.file_type?.startsWith('image/');
+  const isPdf = document.file_type === 'application/pdf';
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -141,7 +133,7 @@ export default function DocumentScreen() {
           ) : (
             <View style={styles.fileIconContainer}>
               <FontAwesome
-                name={getMimeTypeIcon(document.mime_type) as any}
+                name={getFileTypeIcon(document.file_type) as any}
                 size={48}
                 color={Colors.accent}
               />
@@ -150,10 +142,10 @@ export default function DocumentScreen() {
           <Text style={styles.fileName} numberOfLines={2}>
             {document.file_name}
           </Text>
-          {document.document_type && (
+          {document.title && (
             <View style={styles.typeBadge}>
               <Text style={styles.typeBadgeText}>
-                {formatDocumentType(document.document_type)}
+                {formatDocumentTitle(document.title)}
               </Text>
             </View>
           )}
@@ -164,20 +156,19 @@ export default function DocumentScreen() {
           <Text style={styles.detailCardTitle}>Detaljer</Text>
 
           <DetailRow label="Kategori" value={formatCategory(document.category)} />
-          <DetailRow label="Type" value={formatDocumentType(document.document_type)} />
-          {document.entity_name && (
-            <DetailRow label="Tilknyttet" value={document.entity_name} />
+          {document.title && (
+            <DetailRow label="Tittel" value={formatDocumentTitle(document.title)} />
+          )}
+          {document.description && (
+            <DetailRow label="Beskrivelse" value={document.description} />
           )}
           <DetailRow label="Lagt til" value={formatDate(document.created_at)} />
-          {document.expiry_date && (
-            <DetailRow
-              label="Utløper"
-              value={formatDate(document.expiry_date)}
-              warning={expiryWarning}
-            />
+          {document.occurred_at && (
+            <DetailRow label="Dato" value={formatDate(document.occurred_at)} />
           )}
-          <DetailRow label="Sikkerhet" value={formatConfidence(document.confidence)} />
-          <DetailRow label="Status" value={document.status} />
+          {document.file_type && (
+            <DetailRow label="Filtype" value={document.file_type} />
+          )}
         </View>
 
         {/* View file button */}

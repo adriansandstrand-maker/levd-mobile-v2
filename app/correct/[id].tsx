@@ -29,14 +29,14 @@ interface CategoryGroup {
 
 const CATEGORY_GROUPS: CategoryGroup[] = [
   {
-    key: 'forsikringer',
+    key: 'insurance',
     label: 'Forsikringer',
     icon: 'shield',
-    colors: CategoryColors.forsikringer,
+    colors: CategoryColors.insurance,
     types: [
       { key: 'bilforsikring', label: 'Bilforsikring' },
       { key: 'batforsikring', label: 'Båtforsikring' },
-      { key: 'hjemforsikring', label: 'Hjemforsikring' },
+      { key: 'husforsikring', label: 'Husforsikring' },
       { key: 'innboforsikring', label: 'Innboforsikring' },
       { key: 'reiseforsikring', label: 'Reiseforsikring' },
       { key: 'livsforsikring', label: 'Livsforsikring' },
@@ -45,49 +45,25 @@ const CATEGORY_GROUPS: CategoryGroup[] = [
     ],
   },
   {
-    key: 'kjoretoy',
-    label: 'Kjøretøy',
-    icon: 'car',
-    colors: CategoryColors.kjoretoy,
+    key: 'contract',
+    label: 'Kontrakter',
+    icon: 'file-text-o',
+    colors: CategoryColors.contract,
     types: [
-      { key: 'vognkort', label: 'Vognkort' },
-      { key: 'eu_kontroll', label: 'EU-kontroll' },
-      { key: 'kjoretoyhistorikk', label: 'Kjøretøyhistorikk' },
-      { key: 'kjopskontrakt_kjoretoy', label: 'Kjøpskontrakt kjøretøy' },
-      { key: 'service_kvittering', label: 'Servicekvittering' },
-    ],
-  },
-  {
-    key: 'helse',
-    label: 'Helse',
-    icon: 'heartbeat',
-    colors: CategoryColors.helse,
-    types: [
-      { key: 'helsejournal', label: 'Helsejournal' },
-      { key: 'legeerklaring', label: 'Legeerklæring' },
-      { key: 'resept', label: 'Resept' },
-      { key: 'sykemelding', label: 'Sykemelding' },
-      { key: 'vaksinasjonskort', label: 'Vaksinasjonskort' },
-      { key: 'tannlege', label: 'Tannlege' },
-    ],
-  },
-  {
-    key: 'familie',
-    label: 'Familie',
-    icon: 'users',
-    colors: CategoryColors.familie,
-    types: [
-      { key: 'fodselsattest', label: 'Fødselsattest' },
-      { key: 'vigselsattest', label: 'Vigselsattest' },
-      { key: 'fullmakt', label: 'Fullmakt' },
+      { key: 'arbeidskontrakt', label: 'Arbeidskontrakt' },
+      { key: 'leiekontrakt', label: 'Leiekontrakt' },
+      { key: 'kjopskontrakt', label: 'Kjøpskontrakt' },
       { key: 'samboerkontrakt', label: 'Samboerkontrakt' },
+      { key: 'abonnementsavtale', label: 'Abonnementsavtale' },
+      { key: 'kjopskontrakt_eiendom', label: 'Kjøpskontrakt eiendom' },
+      { key: 'kjopskontrakt_kjoretoy', label: 'Kjøpskontrakt kjøretøy' },
     ],
   },
   {
-    key: 'okonomi',
-    label: 'Økonomi',
+    key: 'loan',
+    label: 'Lån',
     icon: 'bank',
-    colors: CategoryColors.okonomi,
+    colors: CategoryColors.loan,
     types: [
       { key: 'lanedokument', label: 'Lånedokument' },
       { key: 'skattemelding', label: 'Skattemelding' },
@@ -97,34 +73,63 @@ const CATEGORY_GROUPS: CategoryGroup[] = [
     ],
   },
   {
-    key: 'jus',
-    label: 'Jus',
-    icon: 'balance-scale',
-    colors: CategoryColors.jus,
+    key: 'receipt',
+    label: 'Kvitteringer',
+    icon: 'credit-card',
+    colors: CategoryColors.receipt,
     types: [
-      { key: 'arbeidskontrakt', label: 'Arbeidskontrakt' },
-      { key: 'testament', label: 'Testament' },
-      { key: 'ektepakt', label: 'Ektepakt' },
-      { key: 'barnebidrag', label: 'Barnebidrag' },
-      { key: 'dom', label: 'Dom' },
+      { key: 'kvittering', label: 'Kvittering' },
+      { key: 'garantibevis', label: 'Garantibevis' },
+      { key: 'service_kvittering', label: 'Servicekvittering' },
     ],
   },
   {
-    key: 'id',
-    label: 'ID',
+    key: 'identification',
+    label: 'ID-dokumenter',
     icon: 'id-card',
-    colors: CategoryColors.id,
+    colors: CategoryColors.identification,
     types: [
       { key: 'pass', label: 'Pass' },
       { key: 'nasjonal_id', label: 'Nasjonalt ID-kort' },
       { key: 'fodselssattest', label: 'Fødselsattest' },
+      { key: 'forerkort', label: 'Førerkort' },
     ],
   },
   {
-    key: 'utdanning',
+    key: 'medical',
+    label: 'Helse',
+    icon: 'heartbeat',
+    colors: CategoryColors.medical,
+    types: [
+      { key: 'helsejournal', label: 'Helsejournal' },
+      { key: 'legeerklaring', label: 'Legeerklæring' },
+      { key: 'resept', label: 'Resept' },
+      { key: 'sykemelding', label: 'Sykemelding' },
+      { key: 'vaksinasjon', label: 'Vaksinasjon' },
+      { key: 'tannlege', label: 'Tannlege' },
+    ],
+  },
+  {
+    key: 'legal',
+    label: 'Juridisk',
+    icon: 'balance-scale',
+    colors: CategoryColors.legal,
+    types: [
+      { key: 'testament', label: 'Testament' },
+      { key: 'ektepakt', label: 'Ektepakt' },
+      { key: 'fullmakt', label: 'Fullmakt' },
+      { key: 'barnebidrag', label: 'Barnebidrag' },
+      { key: 'dom', label: 'Dom' },
+      { key: 'skjote', label: 'Skjøte' },
+      { key: 'byggetillatelse', label: 'Byggetillatelse' },
+      { key: 'takstrapport', label: 'Takstrapport' },
+    ],
+  },
+  {
+    key: 'educational',
     label: 'Utdanning',
     icon: 'graduation-cap',
-    colors: CategoryColors.utdanning,
+    colors: CategoryColors.educational,
     types: [
       { key: 'karakterutskrift', label: 'Karakterutskrift' },
       { key: 'vitnemal', label: 'Vitnemål' },
@@ -133,40 +138,24 @@ const CATEGORY_GROUPS: CategoryGroup[] = [
     ],
   },
   {
-    key: 'reise',
-    label: 'Reise',
-    icon: 'plane',
-    colors: CategoryColors.reise,
+    key: 'drawing',
+    label: 'Tegninger',
+    icon: 'paint-brush',
+    colors: CategoryColors.drawing,
     types: [
-      { key: 'boardingkort', label: 'Boardingkort' },
-      { key: 'hotellbekreftelse', label: 'Hotellbekreftelse' },
-      { key: 'visum', label: 'Visum' },
-      { key: 'reisebekreftelse', label: 'Reisebekreftelse' },
+      { key: 'tegning', label: 'Tegning' },
+      { key: 'barnetegning', label: 'Barnetegning' },
     ],
   },
   {
-    key: 'bolig',
-    label: 'Bolig',
-    icon: 'home',
-    colors: CategoryColors.bolig,
-    types: [
-      { key: 'skjote', label: 'Skjøte' },
-      { key: 'leiekontrakt', label: 'Leiekontrakt' },
-      { key: 'byggetillatelse', label: 'Byggetillatelse' },
-      { key: 'takstrapport', label: 'Takstrapport' },
-      { key: 'kjopskontrakt_eiendom', label: 'Kjøpskontrakt eiendom' },
-    ],
-  },
-  {
-    key: 'annet',
+    key: 'other',
     label: 'Annet',
     icon: 'folder-o',
-    colors: CategoryColors.annet,
+    colors: CategoryColors.other,
     types: [
-      { key: 'garantibevis', label: 'Garantibevis' },
-      { key: 'kvittering', label: 'Kvittering' },
-      { key: 'kjopskontrakt', label: 'Kjøpskontrakt' },
-      { key: 'abonnementsavtale', label: 'Abonnementsavtale' },
+      { key: 'vognkort', label: 'Vognkort' },
+      { key: 'eu_kontroll', label: 'EU-kontroll' },
+      { key: 'vigselsattest', label: 'Vigselsattest' },
       { key: 'ukjent', label: 'Ukjent' },
     ],
   },
@@ -191,7 +180,7 @@ export default function CorrectScreen() {
         .single();
       if (data) {
         setDocument(data as Document);
-        setSelectedType(data.document_type);
+        setSelectedType(data.title);
         setSelectedCategory(data.category);
       }
       setLoading(false);
@@ -209,9 +198,8 @@ export default function CorrectScreen() {
     await supabase
       .from('documents')
       .update({
-        document_type: selectedType,
+        title: selectedType,
         category: selectedCategory,
-        status: 'complete',
       })
       .eq('id', id);
     router.replace({
