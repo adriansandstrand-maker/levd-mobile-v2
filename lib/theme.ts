@@ -7,14 +7,22 @@ export const Colors = {
   border: '#E0DCD6',
   notification: '#D4654A',
   white: '#FFFFFF',
+  forestGreen: '#2F5F52',
 };
 
-export const CategoryColors = {
+export const CategoryColors: Record<string, { bg: string; icon: string }> = {
   scan: { bg: '#E4DAE8', icon: '#5E4F7D' },
   forsikringer: { bg: '#DAEAF4', icon: '#2A5A6A' },
   kjoretoy: { bg: '#D2E8D8', icon: '#3B6B48' },
   helse: { bg: '#EDDADB', icon: '#7E3535' },
   familie: { bg: '#DDD8C6', icon: '#70703E' },
+  okonomi: { bg: '#D8D3E8', icon: '#5B5080' },
+  jus: { bg: '#D5CCE0', icon: '#5A4A6E' },
+  id: { bg: '#C4D5E1', icon: '#4A6A82' },
+  utdanning: { bg: '#CDDDD6', icon: '#5A7A6E' },
+  reise: { bg: '#D4E4E8', icon: '#3A6A70' },
+  bolig: { bg: '#E0D8CC', icon: '#6A5A3E' },
+  annet: { bg: '#E0DCD6', icon: '#7A7068' },
 };
 
 export const QuickActionColors = {

@@ -12,6 +12,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   jus: 'Jus',
   id: 'ID',
   utdanning: 'Utdanning',
+  reise: 'Reise',
+  bolig: 'Bolig',
   annet: 'Annet',
 };
 

@@ -7,6 +7,8 @@ export type Category =
   | 'jus'
   | 'id'
   | 'utdanning'
+  | 'reise'
+  | 'bolig'
   | 'annet';
 
 export type DocumentStatus = 'pending' | 'analysing' | 'complete' | 'failed';

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Linking,
 } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -178,6 +179,17 @@ export default function DocumentScreen() {
           <DetailRow label="Sikkerhet" value={formatConfidence(document.confidence)} />
           <DetailRow label="Status" value={document.status} />
         </View>
+
+        {/* View file button */}
+        {signedUrl && (
+          <Pressable
+            style={({ pressed }) => [styles.viewFileButton, pressed && styles.pressed]}
+            onPress={() => Linking.openURL(signedUrl)}
+          >
+            <FontAwesome name="external-link" size={16} color={Colors.white} />
+            <Text style={styles.viewFileButtonText}>Vis fil</Text>
+          </Pressable>
+        )}
 
         {/* Actions */}
         <View style={styles.actionsRow}>
@@ -354,6 +366,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.text,
     marginBottom: Spacing.sm,
+  },
+  viewFileButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.accent,
+    borderRadius: Radius.md,
+    paddingVertical: Spacing.md,
+    gap: Spacing.sm,
+    marginBottom: Spacing.sm,
+  },
+  viewFileButtonText: {
+    fontFamily: Fonts.dmSansSemiBold,
+    fontSize: 15,
+    color: Colors.white,
   },
   actionsRow: {
     flexDirection: 'row',

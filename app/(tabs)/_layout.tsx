@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { Platform } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs, useRouter } from 'expo-router';
 import { Colors as ThemeColors } from '@/lib/theme';
 import ScanModal from '@/components/ScanModal';
+import * as Haptics from 'expo-haptics';
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -43,6 +45,13 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name="search"
+          options={{
+            title: 'Sok',
+            tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+          }}
+        />
+        <Tabs.Screen
           name="scan"
           options={{
             title: 'Skann',
@@ -51,6 +60,9 @@ export default function TabLayout() {
           listeners={{
             tabPress: (e) => {
               e.preventDefault();
+              if (Platform.OS !== 'web') {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }
               setScanModalVisible(true);
             },
           }}
